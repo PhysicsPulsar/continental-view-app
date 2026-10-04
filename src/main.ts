@@ -1,17 +1,37 @@
 import * as THREE from 'three';
 import earthTexture from "/earth.jpg";
-import { degToRad } from 'three/src/math/MathUtils.js';
 import { DeviceCameraController } from "./camera.ts";
+import { DateController } from "./date.ts";
+import { degToRad } from 'three/src/math/MathUtils.js';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.005, 3);
 
-const renderer = new THREE.WebGLRenderer();
+const canvas = document.querySelector<HTMLCanvasElement>("#three")!;
+const renderer = new THREE.WebGLRenderer({
+    canvas,
+    alpha: true,
+    antialias: true,
+});
+renderer.setClearColor(0x000000, 0);
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
 const controller = new DeviceCameraController(camera);
-controller.enable();
+await controller.enable();
+
+// Video
+
+const video = document.querySelector<HTMLVideoElement>("#camera")!;
+
+const stream = await navigator.mediaDevices.getUserMedia({
+  video: {
+    facingMode: "environment", // rear camera
+  },
+  audio: false,
+});
+
+video.srcObject = stream;
 
 // Earth
 
@@ -19,13 +39,14 @@ const player = new THREE.Object3D();
 scene.add(player);
 camera.rotation.order = "YXZ";
 player.rotation.order = "YXZ";
+player.rotation.set(Math.PI/2, 0, 0);
 
 player.add(camera);
 camera.position.set(0, 1, 0);
 
 
 const texture = new THREE.TextureLoader().load(earthTexture);
-const geometry = new THREE.SphereGeometry(1, 64, 64);
+const geometry = new THREE.SphereGeometry(1, 128, 128);
 const material = new THREE.MeshStandardMaterial({
     map: texture,
     side: THREE.BackSide
@@ -36,21 +57,31 @@ scene.add(sphere);
 
 // light
 
-function subsolarLongitude(date = new Date()): number {
-
-    console.log(date.toISOString());
-    return degToRad(-15 * (date.getHours() + date.getMinutes()*60 - 6));
-
+function handleKeyPress(event: KeyboardEvent) {
+    if (event.key === "t") {
+        dateController.changeHour(+1);
+    }
 }
 
-const sun = new THREE.DirectionalLight(0xffffff, 3);
+document.addEventListener("keydown", handleKeyPress);
 
-sun.position.set(Math.sin(subsolarLongitude()), 0 , Math.cos(subsolarLongitude()));
-sun.target.position.set(0,0,0);
+const sunGeometry = new THREE.SphereGeometry(0.1, 8, 8);
+const sunMaterial = new THREE.MeshBasicMaterial({color: 0xffff00});
+const sun = new THREE.Mesh(sunGeometry, sunMaterial);
+
 scene.add(sun);
+
+const sunLight = new THREE.DirectionalLight(0xffffff, 3);
+
+
+sunLight.target.position.set(0,0,0);
+scene.add(sunLight);
 
 const ambient = new THREE.AmbientLight(0xffffff, 0.3);
 scene.add(ambient);
+
+
+const dateController = new DateController(new Date(), sunLight, sun, camera);
 
 // Keys
 
@@ -78,14 +109,17 @@ function animate() {
     if (keys["y"]) player.rotation.y += rotationSpeed;
     if (keys["z"]) player.rotation.z += rotationSpeed;
 
+    //camera.rotation.y += rotationSpeed;
     
     renderer.render( scene, camera );
 }
 renderer.setAnimationLoop( animate );
 
 
+
 let latitude: number | null = null;
 let longitude: number | null = null;
+
 
 navigator.geolocation.getCurrentPosition(
     (position) => {
@@ -97,6 +131,8 @@ navigator.geolocation.getCurrentPosition(
             Math.PI/2 + degToRad(longitude),
             0
         );
+
+        dateController.updateSun();
 
         console.log("Latitude:", latitude);
         console.log("Longitude:", longitude);
@@ -112,6 +148,3 @@ navigator.geolocation.getCurrentPosition(
         console.error("Could not get location:", error);
     }
 );
-
-
-subsolarLongitude();

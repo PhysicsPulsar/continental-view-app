@@ -23,7 +23,7 @@ export class DeviceCameraController {
     private readonly zee = new THREE.Vector3(0, 0, 1);
     private readonly screenQuaternion = new THREE.Quaternion();
 
-    constructor(camera: THREE.Camera) {
+    constructor(camera: THREE.Camera) { // crea referencia a la cámara
         this.camera = camera;
     }
 
@@ -95,46 +95,38 @@ export class DeviceCameraController {
     };
 
     private update = (): void => {
-        if (!this.enabled) return;
+    if (!this.enabled) return;
 
-        /*
-        * Device orientation:
-        *
-        * alpha = rotation around Z
-        * beta  = rotation around X
-        * gamma = rotation around Y
-        */
-
-        this.euler.set(
+    this.euler.set(
         this.beta,
         this.alpha,
         -this.gamma,
         "YXZ"
-        );
+    );
 
-        this.quaternion.setFromEuler(this.euler);
+    this.quaternion.setFromEuler(this.euler);
 
-        // Convert device coordinates → Three.js camera coordinates
-        this.quaternion.multiply(
-        this.deviceQuaternion
-        );
+    // Device coordinates → Three.js camera coordinates
+    this.quaternion.multiply(this.deviceQuaternion);
 
-        // Account for portrait / landscape orientation
-        const orientation =
+    // Portrait / landscape correction
+    const orientation =
         (screen.orientation?.angle ?? 0) *
         THREE.MathUtils.DEG2RAD;
 
-        this.screenQuaternion.setFromAxisAngle(
+    this.screenQuaternion.setFromAxisAngle(
         this.zee,
         -orientation
-        );
+    );
 
-        this.quaternion.multiply(
+    this.quaternion.multiply(
         this.screenQuaternion
-        );
+    );
 
-        this.camera.quaternion.copy(
+    this.camera.quaternion.copy(
         this.quaternion
-        );
+    );
+    this.camera.rotation.y += Math.PI/2;
+
     };
 }

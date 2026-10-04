@@ -2,7 +2,7 @@ body {
     margin: 0;
 }
 
-#gps {
+#debug {
 	position: absolute;
 	color: white;
 	top: 10px;
@@ -10,4 +10,22 @@ body {
 	text-align: center;
 	z-index: 100;
 	display: block;
+}
+
+#camera,
+#three {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#camera {
+  object-fit: cover;
+  z-index: 0;
+}
+
+#three {
+  z-index: 1;
+  pointer-events: none;
 }
