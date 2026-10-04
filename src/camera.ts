@@ -1,7 +1,9 @@
 import * as THREE from "three";
+//import type { ThreeMFLoader } from "three/examples/jsm/Addons.js";
 
 export class DeviceCameraController {
     private camera: THREE.Camera;
+    private skybox: THREE.Mesh;
 
     private alpha = 0;
     private beta = 0;
@@ -23,8 +25,9 @@ export class DeviceCameraController {
     private readonly zee = new THREE.Vector3(0, 0, 1);
     private readonly screenQuaternion = new THREE.Quaternion();
 
-    constructor(camera: THREE.Camera) { // crea referencia a la cámara
+    constructor(camera: THREE.Camera, skybox: THREE.Mesh) { // crea referencia a la cámara
         this.camera = camera;
+        this.skybox = skybox;
     }
 
     async enable(): Promise<void> {
@@ -58,6 +61,7 @@ export class DeviceCameraController {
         );
 
         this.enabled = true;
+        this.skybox.visible = false;
     }
 
     disable(): void {
@@ -74,6 +78,7 @@ export class DeviceCameraController {
         );
 
         this.enabled = false;
+        this.skybox.visible = true;
     }
 
     private onOrientation = (

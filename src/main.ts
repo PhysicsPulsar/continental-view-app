@@ -5,7 +5,7 @@ import { DateController } from "./date.ts";
 import { degToRad } from 'three/src/math/MathUtils.js';
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.005, 3);
+const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.005, 5);
 
 const canvas = document.querySelector<HTMLCanvasElement>("#three")!;
 const renderer = new THREE.WebGLRenderer({
@@ -17,19 +17,48 @@ renderer.setClearColor(0x000000, 0);
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
-const controller = new DeviceCameraController(camera);
-await controller.enable();
+//skybox
+
+const skyboxGeometry = new THREE.SphereGeometry(4, 8, 8);
+const skyboxMaterial = new THREE.MeshBasicMaterial({color: 0x6296c4, side: THREE.BackSide});
+const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
+
+camera.add(skybox);
 
 // Video
 
-const video = document.querySelector<HTMLVideoElement>("#camera")!;
+let stream: MediaStream | null = null;
 
-const stream = await navigator.mediaDevices.getUserMedia({
-  video: {
-    facingMode: "environment", // rear camera
-  },
-  audio: false,
+const button = document.querySelector<HTMLButtonElement>("#cameraButton")!;
+
+const controller = new DeviceCameraController(camera, skybox);
+
+button.addEventListener("click", async () => {
+    if (!stream) { // Start camera
+
+        stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: "environment" },
+            audio: false,
+        });
+
+        video.srcObject = stream;
+        await video.play();
+        controller.enable();
+
+        button.textContent = "Parar camara";
+
+    } else { // Stop camera
+
+        stream.getTracks().forEach(track => track.stop());
+        stream = null;
+        video.srcObject = null;
+        controller.disable();
+
+        button.textContent = "Encender camara";
+    }
 });
+
+const video = document.querySelector<HTMLVideoElement>("#camera")!;
 
 video.srcObject = stream;
 
@@ -65,6 +94,8 @@ function handleKeyPress(event: KeyboardEvent) {
 
 document.addEventListener("keydown", handleKeyPress);
 
+
+
 const sunGeometry = new THREE.SphereGeometry(0.1, 8, 8);
 const sunMaterial = new THREE.MeshBasicMaterial({color: 0xffff00});
 const sun = new THREE.Mesh(sunGeometry, sunMaterial);
@@ -80,7 +111,10 @@ scene.add(sunLight);
 const ambient = new THREE.AmbientLight(0xffffff, 0.3);
 scene.add(ambient);
 
+// clases
 
+
+//await controller.enable();
 const dateController = new DateController(new Date(), sunLight, sun, camera);
 
 // Keys
