@@ -112,22 +112,62 @@ scene.add(sunLight);
 const ambient = new THREE.AmbientLight(0xffffff, 0.3);
 scene.add(ambient);
 
-// clases
+// Zoom
 
-const fovInput = document.querySelector<HTMLInputElement>('#fov');
-const fovValue = document.querySelector<HTMLSpanElement>('#fov-value');
+const minFov = 30;
+const maxFov = 90;
 
-fovInput?.addEventListener('input', () => {
-    const fov = Number(fovInput.value);
+window.addEventListener('wheel', (event) => {
+    event.preventDefault();
 
-    if (fovValue) {
-        fovValue.textContent = `${fov}°`;
+    camera.fov += event.deltaY * 0.05;
+    camera.fov = Math.max(minFov, Math.min(maxFov, camera.fov));
+
+    camera.updateProjectionMatrix();
+
+    console.log('FOV:', camera.fov);
+}, { passive: false });
+
+
+let lastDistance: number | null = null;
+
+canvas.addEventListener('touchmove', (event) => {
+    if (event.touches.length !== 2) {
+        lastDistance = null;
+        return;
     }
 
-    // Update your camera
-    camera.fov = fov;
-    camera.updateProjectionMatrix();
+    event.preventDefault();
+
+    const a = event.touches[0];
+    const b = event.touches[1];
+
+    const dx = a.clientX - b.clientX;
+    const dy = a.clientY - b.clientY;
+
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    if (lastDistance !== null) {
+        const delta = distance - lastDistance;
+
+        camera.fov -= delta * 0.1;
+
+        camera.fov = Math.max(
+        minFov,
+        Math.min(maxFov, camera.fov)
+        );
+
+        camera.updateProjectionMatrix();
+    }
+
+    lastDistance = distance;
+}, { passive: false });
+
+canvas.addEventListener('touchend', () => {
+    lastDistance = null;
 });
+
+// clases
 
 const timeInput = document.querySelector<HTMLInputElement>('#start-time');
 
