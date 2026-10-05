@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import earthTexture from "/earth.jpg"; // from https://www.solarsystemscope.com
 import { DeviceCameraController } from "./camera.ts";
 import { DateController } from "./date.ts";
+import { DeviceTracker } from "./orientation.ts";
 import { degToRad } from 'three/src/math/MathUtils.js';
 
 
@@ -134,6 +135,10 @@ window.addEventListener("keyup", (event) => {
 
 const rotationSpeed = 0.02;
 
+const tracker = new DeviceTracker(camera);
+
+await tracker.start();
+
 function animate() {
 
     if (keys["a"]) camera.rotation.y += rotationSpeed;
@@ -147,6 +152,7 @@ function animate() {
     if (keys["z"]) player.rotation.z += rotationSpeed;
 
     //camera.rotation.y += rotationSpeed;
+    //tracker.update();
     
     renderer.render( scene, camera );
 }
