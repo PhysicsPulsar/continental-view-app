@@ -45,7 +45,7 @@ button.addEventListener("click", async () => {
         await video.play();
         skybox.visible = false;
 
-        button.textContent = "Parar camara";
+        button.innerHTML = "Parar <br> camara";
 
     } else { // Stop camera
 
@@ -54,7 +54,7 @@ button.addEventListener("click", async () => {
         video.srcObject = null;
         skybox.visible = true;
 
-        button.textContent = "Encender camara";
+        button.innerHTML = "Encender <br> camara";
     }
 });
 

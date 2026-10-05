@@ -6,6 +6,7 @@ body {
 }
 p {
 	margin: 0;
+	font-size: 21px;
 }
 
 header {
@@ -22,6 +23,7 @@ header {
 	align-items: center;
 }
 #title-div a {
+	font-size: 18px;
 	color: white;
 }
 #title {
@@ -46,7 +48,7 @@ header {
 	font-size: 20px;
     position: fixed;
     top: 20px;
-    left: 30px;
+    left: 5%;
     z-index: 1000;
 	padding: 10px;
 
@@ -58,8 +60,8 @@ header {
 #start-time {
 	position: absolute;
 	top: 20px;
-	right: 30px;
-	padding: 10px 12px;
+	right: 5%;
+	padding: 5px;
 	font-size: 20px;
 	border: 2px solid #ccc;
 	border-radius: 6px;
@@ -102,9 +104,10 @@ header {
 }
 
 @media (max-width: 600px) {
-
 	#title {
-		font-size: 50px;
-		color: blue;
+		font-size: 20px;
+	}
+	#cameraButton, #credits, #start-time {
+		font-size: 12px;
 	}
 }
