@@ -69,15 +69,6 @@ export class DeviceTracker {
         );
     }
 
-    /**
-     * Reset the compass.
-     *
-     * The direction the phone is pointing now becomes north.
-     */
-    resetNorth(): void {
-        this.initialHeading = null;
-    }
-
     private handleOrientation = (event: DeviceOrientationEvent): void => {
         if (!this.enabled) return;
 
@@ -129,7 +120,7 @@ export class DeviceTracker {
         const betaRad = THREE.MathUtils.degToRad(beta);
         const gammaRad = THREE.MathUtils.degToRad(gamma);
 
-        euler.set(betaRad, alphaRad, -gammaRad, "YXZ");
+        euler.set(betaRad - Math.PI/2, alphaRad, -gammaRad, "YXZ");
 
         const deviceQuaternion = new THREE.Quaternion();
         deviceQuaternion.setFromEuler(euler);
@@ -139,8 +130,8 @@ export class DeviceTracker {
         */
         const screenQuaternion = new THREE.Quaternion();
         screenQuaternion.setFromAxisAngle(
-        new THREE.Vector3(0, 0, 1),
-        -screenAngle
+            new THREE.Vector3(0, 0, 1),
+            -screenAngle
         );
 
         deviceQuaternion.multiply(screenQuaternion);
