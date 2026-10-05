@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import earthTexture from "/earth.jpg";
+import earthTexture from "/earth.jpg"; // from https://www.solarsystemscope.com
 import { DeviceCameraController } from "./camera.ts";
 import { DateController } from "./date.ts";
 import { degToRad } from 'three/src/math/MathUtils.js';
@@ -77,6 +77,7 @@ camera.position.set(0, 1, 0);
 
 
 const texture = new THREE.TextureLoader().load(earthTexture);
+//texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
 const geometry = new THREE.SphereGeometry(1, 128, 128);
 const material = new THREE.MeshStandardMaterial({
     map: texture,
