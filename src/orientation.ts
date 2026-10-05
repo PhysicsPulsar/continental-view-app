@@ -78,7 +78,7 @@ export class DeviceTracker {
         return;
         }
 
-        const euler = new THREE.Euler();
+        //const euler = new THREE.Euler();
 
         window.addEventListener("deviceorientation", (event) => {
             document.getElementById("alpha")!.textContent =
@@ -96,10 +96,22 @@ export class DeviceTracker {
         const betaRad = THREE.MathUtils.degToRad(beta);
         const gammaRad = THREE.MathUtils.degToRad(gamma);
 
-        euler.set(betaRad - Math.PI/2, alphaRad, +gammaRad, "YXZ");
+        //euler.set(betaRad - Math.PI/2, alphaRad, -gammaRad, "YXZ");
 
+        const euler = new THREE.Euler();
+        euler.set( betaRad, alphaRad, -gammaRad, "YXZ" );
         const deviceQuaternion = new THREE.Quaternion();
         deviceQuaternion.setFromEuler(euler);
+        // --------------------------------------- /
+        // / Correct for the phone's screen rotation /
+        // / ---------------------------------------
+        const screenAngle = (screen.orientation?.angle ?? 0) * THREE.MathUtils.DEG2RAD;
+        const screenQuaternion = new THREE.Quaternion(); 
+        screenQuaternion.setFromAxisAngle( new THREE.Vector3(0, 0, 1), -screenAngle ); 
+        deviceQuaternion.multiply(screenQuaternion);
+
+        //const deviceQuaternion = new THREE.Quaternion();
+        //deviceQuaternion.setFromEuler(euler);
 
         this.camera.quaternion.copy(deviceQuaternion);
     }
