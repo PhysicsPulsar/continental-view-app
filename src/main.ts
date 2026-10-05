@@ -131,7 +131,7 @@ window.addEventListener('wheel', (event) => {
 
 let lastDistance: number | null = null;
 
-canvas.addEventListener('touchmove', (event) => {
+window.addEventListener('touchmove', (event) => {
     if (event.touches.length !== 2) {
         lastDistance = null;
         return;
