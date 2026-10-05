@@ -114,6 +114,21 @@ scene.add(ambient);
 
 // clases
 
+const fovInput = document.querySelector<HTMLInputElement>('#fov');
+const fovValue = document.querySelector<HTMLSpanElement>('#fov-value');
+
+fovInput?.addEventListener('input', () => {
+    const fov = Number(fovInput.value);
+
+    if (fovValue) {
+        fovValue.textContent = `${fov}°`;
+    }
+
+    // Update your camera
+    camera.fov = fov;
+    camera.updateProjectionMatrix();
+});
+
 const timeInput = document.querySelector<HTMLInputElement>('#start-time');
 
 if (timeInput) {
