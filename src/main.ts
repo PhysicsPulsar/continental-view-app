@@ -114,6 +114,21 @@ scene.add(ambient);
 
 // clases
 
+const timeInput = document.querySelector<HTMLInputElement>('#start-time');
+
+if (timeInput) {
+  const now = new Date();
+
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+
+  timeInput.value = `${hours}:${minutes}`;
+}
+
+timeInput?.addEventListener('change', () => {
+    const [hours, minutes] = timeInput.value.split(':').map(Number);
+    dateController.setHour(hours, minutes);
+});
 
 //await controller.enable();
 const dateController = new DateController(new Date(), sunLight, sun, camera);

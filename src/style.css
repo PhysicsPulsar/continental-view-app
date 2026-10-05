@@ -16,12 +16,30 @@ p {
 }
 
 #cameraButton {
-	font-size: 16px;
+	font-size: 21px;
     position: fixed;
     top: 20px;
     left: 20px;
     z-index: 1000;
 	padding: 10px;
+}
+
+#start-time {
+	position: absolute;
+	top: 20px;
+	right: 30px;
+	padding: 10px 12px;
+	font-size: 16px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	background: white;
+	cursor: pointer;
+	z-index: 100;
+}
+
+#start-time:focus {
+	outline: 2px solid #555;
+	outline-offset: 2px;
 }
 
 

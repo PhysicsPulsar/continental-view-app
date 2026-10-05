@@ -8,6 +8,8 @@ export class DateController {
     private camera: THREE.Camera;
     sunAngle: number = 0;
 
+    
+
     constructor(selectedDate: Date, sunLight: THREE.DirectionalLight, sun: THREE.Mesh, camera: THREE.Camera) {
         this.selectedDate = selectedDate; 
         this.sunLight = sunLight;
@@ -20,6 +22,14 @@ export class DateController {
 
     changeHour(delta: number): void {
         this.selectedDate.setUTCHours(this.selectedDate.getUTCHours() + delta);
+        this.updateLabel();
+        this.subsolarLongitude();
+        this.updateSun();
+    }
+
+    setHour(newHour: number, newMinute: number): void {
+        this.selectedDate.setHours(newHour);
+        this.selectedDate.setMinutes(newMinute);
         this.updateLabel();
         this.subsolarLongitude();
         this.updateSun();
