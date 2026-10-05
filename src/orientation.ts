@@ -102,12 +102,10 @@ export class DeviceTracker {
         euler.set( betaRad, alphaRad, -gammaRad, "YXZ" );
         const deviceQuaternion = new THREE.Quaternion();
         deviceQuaternion.setFromEuler(euler);
-        // --------------------------------------- /
-        // / Correct for the phone's screen rotation /
-        // / ---------------------------------------
-        const screenAngle = (screen.orientation?.angle ?? 0) * THREE.MathUtils.DEG2RAD;
-        const screenQuaternion = new THREE.Quaternion(); 
-        screenQuaternion.setFromAxisAngle( new THREE.Vector3(0, 0, 1), -screenAngle ); 
+
+        const screenQuaternion = new THREE.Quaternion();
+
+        screenQuaternion.setFromAxisAngle( new THREE.Vector3(1, 0, 0), -Math.PI/2 ); 
         deviceQuaternion.multiply(screenQuaternion);
 
         //const deviceQuaternion = new THREE.Quaternion();
