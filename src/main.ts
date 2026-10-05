@@ -75,7 +75,6 @@ camera.position.set(0, 1, 0);
 
 
 const texture = new THREE.TextureLoader().load(earthTexture);
-//texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
 const geometry = new THREE.SphereGeometry(1, 128, 128);
 const material = new THREE.MeshStandardMaterial({
     map: texture,
@@ -95,8 +94,6 @@ function handleKeyPress(event: KeyboardEvent) {
 
 document.addEventListener("keydown", handleKeyPress);
 
-
-
 const sunGeometry = new THREE.SphereGeometry(0.1, 8, 8);
 const sunMaterial = new THREE.MeshBasicMaterial({color: 0xffff00});
 const sun = new THREE.Mesh(sunGeometry, sunMaterial);
@@ -104,7 +101,6 @@ const sun = new THREE.Mesh(sunGeometry, sunMaterial);
 scene.add(sun);
 
 const sunLight = new THREE.DirectionalLight(0xffffff, 3);
-
 
 sunLight.target.position.set(0,0,0);
 scene.add(sunLight);
@@ -122,7 +118,7 @@ const maxFov = 90;
 window.addEventListener('wheel', (event) => {
     event.preventDefault();
 
-    camera.fov += event.deltaY * 0.05;
+    camera.fov += Math.sign(event.deltaY) * 5;
     camera.fov = Math.max(minFov, Math.min(maxFov, camera.fov));
 
     camera.updateProjectionMatrix();
@@ -130,7 +126,6 @@ window.addEventListener('wheel', (event) => {
 
     console.log('FOV:', camera.fov);
 }, { passive: false });
-
 
 let lastDistance: number | null = null;
 
@@ -154,11 +149,7 @@ window.addEventListener('touchmove', (event) => {
         const delta = distance - lastDistance;
 
         camera.fov -= delta * 0.1;
-
-        camera.fov = Math.max(
-        minFov,
-        Math.min(maxFov, camera.fov)
-        );
+        camera.fov = Math.max(minFov, Math.min(maxFov, camera.fov));
 
         camera.updateProjectionMatrix();
     }
@@ -170,17 +161,17 @@ canvas.addEventListener('touchend', () => {
     lastDistance = null;
 });
 
-// clases
+// time
 
 const timeInput = document.querySelector<HTMLInputElement>('#start-time');
 
 if (timeInput) {
-  const now = new Date();
+    const now = new Date();
 
-  const hours = String(now.getHours()).padStart(2, '0');
-  const minutes = String(now.getMinutes()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
 
-  timeInput.value = `${hours}:${minutes}`;
+    timeInput.value = `${hours}:${minutes}`;
 }
 
 timeInput?.addEventListener('change', () => {
@@ -188,7 +179,6 @@ timeInput?.addEventListener('change', () => {
     dateController.setHour(hours, minutes);
 });
 
-//await controller.enable();
 const dateController = new DateController(new Date(), sunLight, sun, camera);
 
 // Keys
@@ -220,9 +210,6 @@ function animate() {
     if (keys["x"]) player.rotation.x += rotationSpeed;
     if (keys["y"]) player.rotation.y += rotationSpeed;
     if (keys["z"]) player.rotation.z += rotationSpeed;
-
-    //camera.rotation.y += rotationSpeed;
-    //tracker.update();
     
     renderer.render( scene, camera );
 }
@@ -284,7 +271,6 @@ function createTextSprite(
 
     const sprite = new THREE.Sprite(material);
 
-    // Adjust this to control the physical size in your scene.
     const aspect = canvas.width / canvas.height * 0.1;
     sprite.scale.set(aspect, 0.1, 1);
 
