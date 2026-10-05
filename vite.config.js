@@ -7,7 +7,7 @@ import { defineConfig } from 'vite'
 //import mkcert from 'vite-plugin-mkcert'
 
 export default defineConfig({
-    base: "/continental-viw-app/",
+    base: "/continental-view-app/",
     //base: './', // to copy the dist directly
     //plugins: [ mkcert() ]
 })
