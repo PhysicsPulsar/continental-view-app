@@ -39,11 +39,12 @@ export class DeviceTracker {
         );
 
         // Some browsers only provide deviceorientation.
+        /*
         window.addEventListener(
         "deviceorientation",
         this.handleOrientation,
         true
-        );
+        );*/
     }
 
     /**
@@ -58,11 +59,12 @@ export class DeviceTracker {
         true
         );
 
+        /*
         window.removeEventListener(
         "deviceorientation",
         this.handleOrientation,
         true
-        );
+        );*/
     }
 
     private handleOrientation = (event: DeviceOrientationEvent): void => {
