@@ -4,6 +4,7 @@ import { DeviceCameraController } from "./camera.ts";
 import { DateController } from "./date.ts";
 import { degToRad } from 'three/src/math/MathUtils.js';
 
+
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.005, 5);
 
@@ -16,6 +17,7 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setClearColor(0x000000, 0);
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
+
 
 //skybox
 
@@ -149,6 +151,98 @@ function animate() {
 }
 renderer.setAnimationLoop( animate );
 
+// Text
+
+function createTextSprite(
+    text: string,
+    options: {
+        fontSize?: number;
+        color?: string;
+        background?: string;
+        padding?: number;
+    } = {}
+    ): THREE.Sprite {
+    const {
+        fontSize = 16,
+        color = "#ffffff",
+        background = "transparent",
+        padding = 16,
+    } = options;
+
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d")!;
+
+    ctx.font = `bold ${fontSize}px Arial`;
+
+    const textWidth = ctx.measureText(text).width;
+
+    canvas.width = textWidth + padding * 2;
+    canvas.height = fontSize + padding * 2;
+
+    // Canvas dimensions changed, so set font again.
+    ctx.font = `bold ${fontSize}px Arial`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    if (background !== "transparent") {
+        ctx.fillStyle = background;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    ctx.fillStyle = color;
+    ctx.fillText(
+        text,
+        canvas.width / 2,
+        canvas.height / 2
+    );
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+
+    const material = new THREE.SpriteMaterial({
+        map: texture,
+        transparent: true,
+        depthTest: false,
+    });
+
+    const sprite = new THREE.Sprite(material);
+
+    // Adjust this to control the physical size in your scene.
+    const aspect = canvas.width / canvas.height * 0.1;
+    sprite.scale.set(aspect, 0.1, 1);
+
+    return sprite;
+}
+
+const nLabel = createTextSprite("N", {
+    fontSize: 42,
+    color: "#ffffff",
+    background: "rgba(0, 0, 0, 0)",
+});
+const sLabel = createTextSprite("S", {
+    fontSize: 42,
+    color: "#ffffff",
+    background: "rgba(0, 0, 0, 0)",
+});
+const eLabel = createTextSprite("E", {
+    fontSize: 42,
+    color: "#ffffff",
+    background: "rgba(0, 0, 0, 0)",
+});
+const oLabel = createTextSprite("O", {
+    fontSize: 42,
+    color: "#ffffff",
+    background: "rgba(0, 0, 0, 0)",
+});
+
+nLabel.position.set(0, 1, -1);
+sLabel.position.set(0, 1, 1);
+eLabel.position.set(1, 1, 0);
+oLabel.position.set(-1, 1, 0);
+player.add(nLabel);
+player.add(sLabel);
+player.add(eLabel);
+player.add(oLabel);
 
 
 let latitude: number | null = null;

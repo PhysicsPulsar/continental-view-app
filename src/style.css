@@ -20,6 +20,12 @@ body {
 	padding: 10px;
 }
 
+.dir {
+	color: black;
+	font-size: 32px;
+	z-index: 1000;
+}
+
 #camera,
 #three {
 	position: fixed;
