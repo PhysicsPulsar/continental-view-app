@@ -98,9 +98,9 @@ export class DeviceTracker {
         const compassHeading = this.getCompassHeading(event);
 
         if (compassHeading !== null) {
-        if (this.initialHeading === null) {
-            this.initialHeading = compassHeading;
-        }
+            if (this.initialHeading === null) {
+                this.initialHeading = compassHeading;
+            }
         }
 
         /*
