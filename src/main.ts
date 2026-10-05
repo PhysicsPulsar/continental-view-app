@@ -114,6 +114,8 @@ scene.add(ambient);
 
 // Zoom
 
+const fovElement = document.getElementById("fov")!;
+
 const minFov = 30;
 const maxFov = 90;
 
@@ -124,6 +126,7 @@ window.addEventListener('wheel', (event) => {
     camera.fov = Math.max(minFov, Math.min(maxFov, camera.fov));
 
     camera.updateProjectionMatrix();
+    fovElement.textContent = `FOV  ${Math.round(camera.fov)}°`;
 
     console.log('FOV:', camera.fov);
 }, { passive: false });
