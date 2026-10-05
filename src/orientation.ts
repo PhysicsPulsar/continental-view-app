@@ -79,15 +79,15 @@ export class DeviceTracker {
         const euler = new THREE.Euler();
 
         window.addEventListener("deviceorientation", (event) => {
-        document.getElementById("alpha")!.textContent =
-            event.alpha?.toFixed(1) ?? "—";
+            document.getElementById("alpha")!.textContent =
+                event.alpha?.toFixed(1) ?? "—";
 
-        document.getElementById("beta")!.textContent =
-            event.beta?.toFixed(1) ?? "—";
+            document.getElementById("beta")!.textContent =
+                event.beta?.toFixed(1) ?? "—";
 
-        document.getElementById("gamma")!.textContent =
-            event.gamma?.toFixed(1) ?? "—";
-});
+            document.getElementById("gamma")!.textContent =
+                event.gamma?.toFixed(1) ?? "—";
+        });
 
 
         const alphaRad = THREE.MathUtils.degToRad(alpha);

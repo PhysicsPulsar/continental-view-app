@@ -80,7 +80,7 @@ export class DeviceCameraController {
         this.enabled = false;
         this.skybox.visible = true;
     }
-
+    
     private onOrientation = (
         event: DeviceOrientationEvent
     ): void => {
