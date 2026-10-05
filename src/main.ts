@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import earthTexture from "/earth.jpg"; // from https://www.solarsystemscope.com
-//import { DeviceCameraController } from "./camera.ts";
 import { DateController } from "./date.ts";
 import { DeviceTracker } from "./orientation.ts";
 import { degToRad } from 'three/src/math/MathUtils.js';
@@ -34,8 +33,6 @@ let stream: MediaStream | null = null;
 
 const button = document.querySelector<HTMLButtonElement>("#cameraButton")!;
 
-//const controller = new DeviceCameraController(camera, skybox);
-
 button.addEventListener("click", async () => {
     if (!stream) { // Start camera
 
@@ -46,7 +43,7 @@ button.addEventListener("click", async () => {
 
         video.srcObject = stream;
         await video.play();
-        //controller.enable();
+        skybox.visible = false;
 
         button.textContent = "Parar camara";
 
@@ -55,7 +52,7 @@ button.addEventListener("click", async () => {
         stream.getTracks().forEach(track => track.stop());
         stream = null;
         video.srcObject = null;
-        //controller.disable();
+        skybox.visible = true;
 
         button.textContent = "Encender camara";
     }

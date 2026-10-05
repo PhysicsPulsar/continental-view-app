@@ -9,12 +9,6 @@ export class DeviceTracker {
         this.camera = camera;
     }
 
-    /**
-     * Start listening to the device orientation.
-     *
-     * Call this from a button click/tap because iOS requires
-     * permission to be requested from a user interaction.
-     */
     async start(): Promise<void> {
         // iOS requires explicit permission.
         const DeviceOrientationEventClass =
@@ -33,23 +27,12 @@ export class DeviceTracker {
         this.enabled = true;
 
         window.addEventListener(
-        "deviceorientationabsolute",
+        "deviceorientationabsolute", // maybe doesnt work in some devices?
         this.handleOrientation,
         true
         );
-
-        // Some browsers only provide deviceorientation.
-        /*
-        window.addEventListener(
-        "deviceorientation",
-        this.handleOrientation,
-        true
-        );*/
     }
 
-    /**
-     * Stop controlling the camera.
-     */
     stop(): void {
         this.enabled = false;
 
@@ -58,13 +41,6 @@ export class DeviceTracker {
         this.handleOrientation,
         true
         );
-
-        /*
-        window.removeEventListener(
-        "deviceorientation",
-        this.handleOrientation,
-        true
-        );*/
     }
 
     private handleOrientation = (event: DeviceOrientationEvent): void => {
@@ -77,20 +53,6 @@ export class DeviceTracker {
         if (alpha === null || beta === null || gamma === null) {
         return;
         }
-
-        //const euler = new THREE.Euler();
-
-        window.addEventListener("deviceorientation", (event) => {
-            document.getElementById("alpha")!.textContent =
-                event.alpha?.toFixed(1) ?? "—";
-
-            document.getElementById("beta")!.textContent =
-                event.beta?.toFixed(1) ?? "—";
-
-            document.getElementById("gamma")!.textContent =
-                event.gamma?.toFixed(1) ?? "—";
-        });
-
 
         const alphaRad = THREE.MathUtils.degToRad(alpha);
         const betaRad = THREE.MathUtils.degToRad(beta);
@@ -107,9 +69,6 @@ export class DeviceTracker {
 
         screenQuaternion.setFromAxisAngle( new THREE.Vector3(1, 0, 0), -Math.PI/2 ); 
         deviceQuaternion.multiply(screenQuaternion);
-
-        //const deviceQuaternion = new THREE.Quaternion();
-        //deviceQuaternion.setFromEuler(euler);
 
         this.camera.quaternion.copy(deviceQuaternion);
     }

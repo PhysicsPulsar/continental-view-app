@@ -16,6 +16,7 @@ p {
 }
 
 #cameraButton {
+	font-size: 16px;
     position: fixed;
     top: 20px;
     left: 20px;
@@ -23,22 +24,6 @@ p {
 	padding: 10px;
 }
 
-#orientation-debug {
-	position: fixed;
-	top: 100px;
-	left: 10px;
-	z-index: 1000;
-
-	padding: 10px 14px;
-	border-radius: 8px;
-
-	background: rgba(0, 0, 0, 0.75);
-	color: white;
-
-	font-family: monospace;
-	font-size: 16px;
-	line-height: 1.6;
-}
 
 .dir {
 	color: black;
