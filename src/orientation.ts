@@ -83,7 +83,7 @@ export class DeviceTracker {
         const betaRad = THREE.MathUtils.degToRad(beta);
         const gammaRad = THREE.MathUtils.degToRad(gamma);
 
-        euler.set(betaRad - Math.PI/2, alphaRad, -gammaRad, "YXZ");
+        euler.set(betaRad - Math.PI/2, alphaRad, +gammaRad, "YXZ");
 
         const deviceQuaternion = new THREE.Quaternion();
         deviceQuaternion.setFromEuler(euler);
