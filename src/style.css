@@ -9,12 +9,11 @@ p {
 }
 
 header {
+	position: fixed;
 	display: flex;
 	justify-content: center;
-	position: absolute;
 	color: white;
 	width: 100%;
-	height: 100px;
 	z-index: 100;
 }
 #title-div {
@@ -103,13 +102,9 @@ header {
 }
 
 @media (max-width: 600px) {
-	header {
-		height: 20vh;
-	}
-	#camera-button, #start-time {
-		font-size: 32px;
-	}
+
 	#title {
-		font-size: 42px;
+		font-size: 50px;
+		color: blue;
 	}
 }

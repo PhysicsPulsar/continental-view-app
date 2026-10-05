@@ -150,6 +150,7 @@ window.addEventListener('touchmove', (event) => {
 
         camera.fov -= delta * 0.1;
         camera.fov = Math.max(minFov, Math.min(maxFov, camera.fov));
+        fovElement.textContent = `FOV  ${Math.round(camera.fov)}°`;
 
         camera.updateProjectionMatrix();
     }
